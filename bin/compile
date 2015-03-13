@@ -3,6 +3,7 @@
 # Usage:
 #
 #     $ bin/compile <build-dir> <cache-dir> <env-dir>
+echo "##################### compile"
 
 BUILD_DIR=$1
 CACHE_DIR=$2

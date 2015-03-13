@@ -3,6 +3,7 @@
 # Usage:
 #
 #     $ bin/release <build-dir>
+echo "##################### release"
 
 BUILD_DIR=$1
 

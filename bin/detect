@@ -3,6 +3,7 @@
 # Usage:
 #
 #     $ bin/detect <build-dir>
+echo "################### detect"
 
 BUILD_DIR=$1
 
