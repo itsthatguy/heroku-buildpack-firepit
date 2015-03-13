@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+docker build -q --force-rm -t buildpack-firepit . > /dev/null
+
+docker run -i -t --rm buildpack-firepit

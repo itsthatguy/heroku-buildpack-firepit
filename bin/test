@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+# See README.md for info on running these tests.
+
+testDetectWithoutHelloTxt() {
+	detect "no-hello-txt"
+	assertCapturedError 1 ""
+}
+
+testDetectWithHelloTxt() {
+	detect "hello-txt"
+	assertCaptured "firepit"
+	assertCapturedSuccess
+}
+
+testCompileSimple() {
+	compile "hello-txt"
+	assertCapturedSuccess
+}
+
+testReleaseSimple() {
+	release "hello-txt"
+	assertCaptured "default_process_types:"
+	assertCapturedSuccess
+}
+
+# Utils
+
+pushd $(dirname 0) >/dev/null
+BP_DIR=$(pwd)
+popd >/dev/null
+
+source "$BP_DIR/vendor/test-utils"
+
+mktmpdir() {
+	dir=$(mktemp -t testXXXXX)
+	rm -rf $dir
+	mkdir $dir
+	echo $dir
+}
+
+detect() {
+	capture "$BP_DIR/bin/detect" "$BP_DIR/test/$1"
+}
+
+compile_dir=""
+
+compile() {
+	compile_dir=$(mktmpdir)
+	if [ -z $2 ]; then
+		cache_dir=$2
+	else
+		cache_dir=$(mktmpdir)
+	fi
+	cp -r "$BP_DIR/test/$1/." "$compile_dir"
+	capture "$BP_DIR/bin/compile" "$compile_dir" "$cache_dir" "$3"
+}
+
+release() {
+	capture "$BP_DIR/bin/release" "$BP_DIR/test/$1"
+}
+
+assertFile() {
+	assertEquals "$1" "$(cat $compile_dir/$2)"
+}
+
+source "$BP_DIR/vendor/shunit2"
